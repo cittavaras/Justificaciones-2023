@@ -1,0 +1,33 @@
+#cont-add-coordinador,
+#cont-asignar-coordinador {
+  width: 450px;
+  margin: auto;
+}
+#add-coordinador,
+#asignar-coordinador {
+  display: grid;
+  padding-left: 10px;
+}
+#add-coordinador input,
+#asignar-coordinador input {
+  margin-bottom: 15px;
+  width: 65%;
+}
+#but-add-coordinador,
+#but-asignar-coordinador {
+  background: #26b99a;
+  border: 1px solid #169f85;
+  border-radius: 3px;
+  margin: 0;
+  color: white;
+  font-size: 15px;
+  padding: 7px 17px;
+  width: 25% !important;
+}
+#seccion-coordinador,
+#carrera-coordinador,
+#coordinador,
+#jornada-coordinador {
+  margin-bottom: 15px;
+  width: 65%;
+}

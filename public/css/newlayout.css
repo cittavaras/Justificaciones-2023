@@ -1,0 +1,149 @@
+/* app */
+/* app */
+/* app */
+
+#app {
+  /* font-family: Avenir, Helvetica, Arial, sans-serif; */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.leftnav {
+  grid-area: leftnav;
+}
+.main {
+  grid-area: main;
+  background: #f7f7f7;
+}
+.topnav {
+  grid-area: topnav;
+}
+.footer {
+  grid-area: footer;
+}
+.logo {
+  grid-area: logo;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 250px auto;
+  grid-template-rows: 50px auto 50px;
+  grid-template-areas:
+    'leftnav topnav'
+    'leftnav main'
+    'logo footer';
+  width: 70vw;
+  height: 100vh;
+}
+
+.outer {
+  background-color: #3d3d3d;
+}
+
+/* leftnav */
+/* leftnav */
+/* leftnav */
+
+.leftnav {
+  /* background-color: #4352a7; */
+  background-color: #2a3f54;
+  color: white;
+  display: grid;
+}
+
+.leftnav h1 {
+  justify-self: end;
+
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.leftnav ul {
+  margin-top: 50px;
+  list-style-type: none;
+  font-size: 11px;
+}
+
+.leftnav ul li a {
+  font-size: 11px;
+}
+
+.leftnav li {
+  padding: 20px 25px;
+  text-transform: uppercase;
+}
+
+.leftnav li:hover {
+  background-color: #3a5168;
+}
+
+.leftnav li i {
+  font-size: 16px;
+  margin-right: 15px;
+}
+
+.leftnav span {
+  display: block;
+  text-transform: uppercase;
+  font-size: 11px;
+  margin-left: 33px;
+}
+
+/* topnav */
+/* topnav */
+/* topnav */
+
+.topnav {
+  display: grid;
+  background-color: #f7f7f7;
+}
+
+.topnav p {
+  border-radius: 5px;
+  margin-top: 3px;
+  margin-right: 3px;
+  color: rgb(255, 255, 255);
+  background-color: #000000;
+  justify-self: end;
+  align-self: start;
+  font-size: 12px;
+  width: auto;
+  padding: 9px 15px;
+}
+
+/* footer */
+/* footer */
+/* footer */
+.footer {
+  display: grid;
+  background-color: white;
+}
+
+.footer p {
+  justify-self: end;
+  align-self: center;
+  font-size: 12px;
+  color: rgb(170, 170, 170);
+  margin-right: 20px;
+}
+/* logo */
+/* logo */
+/* logo */
+
+.logo {
+  display: grid;
+  background-color: #2a3f54;
+}
+
+.logo p {
+  align-self: center;
+  font-size: 10px;
+  color: rgb(255, 255, 255);
+  margin-left: 20px;
+  text-transform: uppercase;
+}
+
+.logo p:hover {
+  color: black;
+}
