@@ -124,113 +124,22 @@ class AdministradorController extends Controller
 
 	public function cargar_datos(Request $request)
 	{
-		// Arreglo que contiene los nombres de las columnas y su respectivo orden
-		$COLUMNAS_MATCH = array(
-			'rut_alumno',
-			'codigo_seccion',
-			'nombre_asignatura',
-			'nombre_alumno',
-			'apellido_paterno_alumno',
-			'apellido_materno_alumno',
-			'correo_alumno',
-			'telefono',
-			'codigo_carrera',
-			'carrera',
-			'jornada',
-			'id_docente',
-			'nombre_docente',
-			'apellido_paterno_docente',
-			'apellido_materno_docente',
-			'correo_docente',
-			'nombre_coordinador',
-			'apellido_paterno_coordinador',
-			'apellido_materno_coordinador',
-			'correo_coordinador'
-		);
-
-		// Si la petición no lleva el archivo consigo
-		if (!$request->hasFile('archivo-csv')) {
+			// Si la petición no lleva el archivo consigo
+		if (!$request->hasFile('archivo-xlsx')) {
 			return response()->json(['type' => 'error', 'code' => 'not-arrived', 'message' => 'El archivo no ha llegado al servidor, inténtelo nuevamente']);
 		} else {
 			// Variables que guardan los datos básicos del archivo recién subido
-			$file = $request->file('archivo-csv');           // Objeto del archivo
+			$file = $request->file('archivo-xlsx');           // Objeto del archivo
 			$filename = $file->getClientOriginalName();      // Nombre del archivo
 			$file_ext = $file->getClientOriginalExtension(); // Extensión del archivo
-
-			// Si el archivo cargado no es tipo CSV
-			if (strtolower($file_ext) != 'csv') {
-				return response()->json(['type' => 'error', 'code' => 'invalid-format', 'message' => 'El formato del archivo es inválido, asegúrese que sea formato CSV']);
-			} else {
-				$file->move(base_path('cargasemestral/'), $filename);   // Almacena el archivo CSV en el directorio <proyecto>/cargasemestral
-				$stored_csv = base_path('cargasemestral/' . $filename); // Variable que almacena la ruta del archivo CSV recién guardado
-
-				// Bloque que permite la lectura del archivo CSV cargado
-				if (($csv = fopen(base_path('cargasemestral/' . $filename), 'r')) !== FALSE) {
-					// Obtiene los nombres de las columnas
-					if (($data = fgetcsv($csv, 4096, ',')) !== FALSE) {
-						$columnas_csv = $data; // Variable que va a retener las columnas del CSV
-
-						// Ciclo para recorrer cada columna leída del CSV y comenzar el formateo
-						for ($i = 0; $i < count($columnas_csv); $i++) {
-							// Conversión a minúsculas
-							$columna = strtolower($columnas_csv[$i]);
-
-							// Elimina espacios alrededor de la columna
-							$columna = trim($columna);
-
-							// Reemplaza el espacio separador por _
-							$columna = str_replace(' ', '_', $columna);
-
-							// Elimina las acentuaciones de los caracteres
-							$columna = strtr(
-								utf8_decode($columna),
-								utf8_decode('àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ'),
-								'aaaaaceeeeiiiinooooouuuuyyaaaaaceeeeiiiinooooouuuuy'
-							);
-
-							// Guarda la columna formateada en la posición actual del arreglo de columnas
-							$columnas_csv[$i] = $columna;
-						}
-
-						fclose($csv); // Cierra el archivo CSV
-
-						// Si las columnas del CSV no coinciden con los nombres ni el orden requerido
-						if ($columnas_csv !== $COLUMNAS_MATCH) {
-							return response()->json(['type' => 'error', 'code' => 'columns-not-match', 'message' => 'Las columnas del archivo CSV']);
-						} else {
-							// Comienza la transformación del archivo CSV a SQL
-							$old_path = getcwd();
-							chdir(base_path('cargasemestral/'));
-							shell_exec(base_path() . '/cargaSemestral_generarSQL.sh ' . base_path('cargasemestral/' . $filename));
-							chdir($old_path);
-
-							// Ejecuta el SQL de la carga semestral
-							if (DB::unprepared(file_get_contents(base_path('cargasemestral/carga.sql')))) {
-								// unlink(base_path('cargasemestral/' . $filename));
-								// unlink(base_path('cargasemestral/carga.sql'));
-
-								// Inserción de nuevos usuarios y cifrado de contraseñas
-								DB::unprepared(file_get_contents(base_path() . '/insertarnuevosusuarios.sql'));
-
-								$users = User::where('activacion', '=', '2')->get();
-								foreach ($users as $user) {
-									$user->password = Hash::make($user->password);
-									$user->activacion = 0;
-									$user->save();
-								}
-
-								return response()->json(['type' => 'success', 'code' => 'success', 'message' => '¡La carga semestral se ha realizado con éxito!!!!']);
-							} else {
-								return response()->json(['type' => 'error', 'code' => 'db-load-error', 'message' => 'Hubo un error en la base de datos durante la carga semestral']);
-							}
-						}
-					}
-				} else {
-					return response()->json(['type' => 'error', 'code' => 'unreadable', 'message' => 'El archivo está ilegible o corrupto']);
-				}
-			}
-		}
-	}
+			if (strtolower($file_ext) != 'xlsx') {
+				return response()->json(['type' => 'error', 'code' => 'invalid-format', 'message' => 'El formato del archivo es inválido, asegúrese que sea formato XLSX']);
+				}else{
+					$file->move(base_path('cargasemestral/'),'archivo-excel.xlsx');
+					exec('python3.8 /root/Desarrollo/Justificaciones-2023/cargasemestral/carga_datos.py');
+					exec('rm /root/Desarrollo/Justificaciones-2023/cargasemestral/archivo-excel.xlsx');
+				}}}
+								
 
 	public function exportCsv(Request $request)
 	{

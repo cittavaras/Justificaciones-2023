@@ -27,13 +27,15 @@
           <p class="pa">
             Para limpiar el registro de justificaciones, diríjase a <a href={{ url('/administrador/cierresemestre') }}>cierre de semestre</a>.
           </p>
-        
+	  <p class="pa">
+	    El sistema requiere que el archivo sea con formato <i><b>.XLSX</b></i>
+	  </p>        
           <div class="file-area">
             <input
-              id="archivo-csv"
+              id="archivo-xlsx"
               type="file"
-              accept=".csv"
-              name="archivo-csv"
+              accept=".xlsx"
+              name="archivo-xlsx"
               required
             />
             <button
