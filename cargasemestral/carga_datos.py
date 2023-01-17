@@ -33,5 +33,11 @@ else:
         conexion.commit() #Se completa la sentencia SQL
         i=i+1 #Y junton con un contador para que se pueda detener
 
+cursor.execute('''
+INSERT INTO users (email,password,name)
+SELECT distinct CORREO_ALUM,RUT_ALU,NOMBRE_ALUM 
+FROM datos_semestre
+WHERE NOT EXISTS(SELECT * FROM users WHERE (datos_semestre.CORREO_ALUM=users.email));''')
+conexion.commit()
 conexion.close() #Por último se cierra la conexión
 #Recordatorio, instalar las siguientes librerias: mysql-connector-python,pandas,openpyxlcargasemestral/validacion.py

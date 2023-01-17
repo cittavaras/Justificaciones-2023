@@ -138,6 +138,12 @@ class AdministradorController extends Controller
 					$file->move(base_path('cargasemestral/'),'archivo-excel.xlsx');
 					exec('python3.8 /root/Desarrollo/Justificaciones-2023/cargasemestral/carga_datos.py');
 					exec('rm /root/Desarrollo/Justificaciones-2023/cargasemestral/archivo-excel.xlsx');
+					$users = User::where('activacion','=','2')->get();
+					foreach ($users as $user) {
+						$user->password = Hash::make($user->password);
+						$user->activacion = 0;
+						$user->save();
+					}
 				}}}
 								
 

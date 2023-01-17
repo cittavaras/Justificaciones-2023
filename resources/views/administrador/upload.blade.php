@@ -43,7 +43,7 @@
               class="btn btn-success"
               type="submit"
             >
-            Enjviar
+            Enviar
             </button>
 
           </div>
@@ -76,13 +76,13 @@
 						$("#respuesta-carga").html("ERROR: " + response.message);
 					} else {
 						$("#respuesta-carga").css("color", "green");
-						$("#respuesta-carga").html("HECHO: " + response.message);
+						$("#respuesta-carga").html("HECHO: Se ha completado los datos semestre!");
 						$("#carga-form")[0].reset();
 					}
 				},
 				error: function(response) {
 					$("#respuesta-carga").css("color", "red");
-					$("#respuesta-carga").html("ERROR: Hubo un error desconocido al subir el archivo CSV, inténtelo nuevamente");
+					$("#respuesta-carga").html("ERROR: Hubo un error desconocido al subir el archivo XLSX, inténtelo nuevamente");
 					$("#preloader").css("display", "none");
 				}
 			}).done(function() {
