@@ -27,7 +27,7 @@
 		<select name="carrera" id="carrera-coordinador">
 			<option value="null">Seleccione una carrera</option>
 			@foreach($cursos as $item)
-			<option value="{{$item['COD_CARRERA'].' '.$item['CARRERA']}}">{{$item['COD_CARRERA'].' '.$item['CARRERA']}}</option>
+			<option value="{{$item['COD_CARRERA'].' '.$item['CARRERA'].' '.$item['JORNADA']}}">{{$item['COD_CARRERA'].' '.$item['CARRERA'].' '.$item['JORNADA']}}</option>
 			@endforeach
 		</select>
 

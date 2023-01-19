@@ -236,7 +236,7 @@ class AdministradorController extends Controller
 			return response()->json(['message' => 'hola']);
 		} else {
 			$cursos = DB::table('datos_semestre')
-				->select('CARRERA','COD_CARRERA')
+				->select('CARRERA','COD_CARRERA','JORNADA')
 				->distinct()
 				->orderBy('CARRERA', 'ASC')
 				->get();
