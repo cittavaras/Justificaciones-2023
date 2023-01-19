@@ -31,10 +31,12 @@
 			@endforeach
 		</select>
 
+		<!--
 		<label for="seccion">Sección: </label>
 		<select name="seccion" id="seccion-coordinador" disabled>
 			<option value="null">Seleccione una sección</option>
 		</select>
+-->
 
 		<label for="coordinador">Coordinador:</label>
 		<select name="coordinador" id="coordinador" disabled>
@@ -63,21 +65,22 @@
 					type: "GET",
 					dataType: "json",
 					success: function(data) {
-						$("#seccion-coordinador").find("option").not(":first").remove();
+						$("#coordinador").find("option").not(":first").remove();
 						data.forEach((e) => {
 							var asig = e["NOM_ASIG"];
 							var id = asig.substr(0, asig.indexOf(" "));
 							console.log(asig + " " + id);
-							$("#seccion-coordinador").append(new Option(asig, id));
+							$("#coordinador").append(new Option(asig, id));
 						});
 					},
 					complete: function() {
-						$("#seccion-coordinador").removeAttr("disabled");
+						$("#coordinador").removeAttr("disabled");
 					}
 				});
 			}
 		});
 
+		/** 
 		$("#seccion-coordinador").change(function() {
 			var seccion = $(this).val();
 
@@ -97,7 +100,7 @@
 					}
 				});
 			}
-		});
+		});*/
 
 		$("#but-asignar-coordinador").submit(function(event) {
 			event.preventDefault();

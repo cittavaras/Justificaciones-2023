@@ -230,20 +230,25 @@ class AdministradorController extends Controller
 			return response()->json(['message' => 'hola']);
 		} else {
 			$cursos = DB::table('datos_semestre')
-				->select('CARRERA')
+				->select('CARRERA','COD_CARRERA')
 				->distinct()
 				->orderBy('CARRERA', 'ASC')
 				->get();
 			$cursos = json_decode(json_encode($cursos), true);
 
-			$coordinadores = DB::table('coordinadores')
-				->select('NOMBRE_COR', 'APEP_COR', 'APEM_COR')
+			
+			
+			$resultado = DB::table('datos_semestre')
+				->select('NOMBRE_COR','APEP_COR','APEM_COR')
+				->distinct()
 				->get();
-			$coordinadores = json_decode(json_encode($coordinadores), true);
+			$resultado = json_decode(json_encode($resultado),true);
+
+
 
 			return view('administrador.asignar-coordinador', [
 				'cursos' => $cursos,
-				'coordinadores' => $coordinadores
+				'coordinadores' => $resultado
 			]);
 		}
 	}
