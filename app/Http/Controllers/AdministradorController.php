@@ -233,7 +233,40 @@ class AdministradorController extends Controller
 	public function asignarSeccionCoordinador(Request $request)
 	{
 		if ($request->isMethod('POST')) {
-			return response()->json(['message' => 'hola']);
+
+			//Guardo en variable el coordinador y la carrera seleccionada
+			$newCoordinador = $request -> input('coordinador');
+			$newCurso = $request -> input('carrera');
+
+			$codCurso = (int) filter_var($newCurso,FILTER_SANITIZE_NUMBER_INT);
+			$datos_coordinador = DB::select("SELECT nombre_cor,apep_cor,apem_cor,correo_cor from datos_semestre WHERE concat_ws(' ',nombre_cor,apep_cor,apem_cor) LIKE ?",[$newCoordinador]);
+			$correoCor = $datos_coordinador[0]->correo_cor;
+
+			$nomCoordinador = $datos_coordinador[0]->nombre_cor;
+            $apepCoordinador = $datos_coordinador[0]->apep_cor;
+            $apemCoordinador = $datos_coordinador[0]->apem_cor;
+			
+
+			/*DB::table('datos_semestre')
+				->where('cod_carrera',$codCurso)
+				->update(['NOMBRE_CORR' => DB::raw($nomCoordinador) , 'APEP_COR'=> DB::raw($apepCoordinador) , 'APEM_COR'=> DB::raw($apemCoordinador) , 'CORREO_COR'=> DB::raw($correoCor)]);
+			*/
+			//$statement = "UPDATE datos_semestre SET NOMBRE_CORR = '$nomCoordinador' , APEP_CORR = '$apepCoordinador', APEM_COR = '$apemCoordinador' , CORREO_COR = '$correoCor' WHERE COD_CARRERA = '$codCurso'";
+
+			//DB::statement("UPDATE datos_semestre SET NOMBRE_CORR = 'CAMILA' , APEP_CORR = 'GONZALEZ', APEM_COR = 'H' , CORREO_COR = 'cagonzalezh@duoc.cl' WHERE COD_CARRERA = 667215");
+
+			/*DB::table('datos_semestre')
+			->where('cod_carrera',$codCurso)
+			->update(['NOMBRE_CORR' => $nomCoordinador , 'APEP_COR'=> $apepCoordinador , 'APEM_COR'=> $apemCoordinador , 'CORREO_COR'=> $correoCor ]);
+			return response()->json(['message' => 'Data actualizada con exito'],200);
+			*/
+
+	
+
+			echo $codCurso ;
+			echo $newCoordinador;
+			echo $correoCor;
+
 		} else {
 			$cursos = DB::table('datos_semestre')
 				->select('CARRERA','COD_CARRERA','JORNADA')
@@ -251,13 +284,15 @@ class AdministradorController extends Controller
 			$resultado = json_decode(json_encode($resultado),true);
 
 
-
 			return view('administrador.asignar-coordinador', [
 				'cursos' => $cursos,
 				'coordinadores' => $resultado
 			]);
 		}
 	}
+
+	
+
 
 	public function getCoordinador($carrera, $seccion)
 	{
