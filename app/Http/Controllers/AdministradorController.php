@@ -233,40 +233,28 @@ class AdministradorController extends Controller
 	public function asignarSeccionCoordinador(Request $request)
 	{
 		if ($request->isMethod('POST')) {
-
-			//Guardo en variable el coordinador y la carrera seleccionada
-			$newCoordinador = $request -> input('coordinador');
-			$newCurso = $request -> input('carrera');
-
-			$codCurso = (int) filter_var($newCurso,FILTER_SANITIZE_NUMBER_INT);
-			$datos_coordinador = DB::select("SELECT nombre_cor,apep_cor,apem_cor,correo_cor from datos_semestre WHERE concat_ws(' ',nombre_cor,apep_cor,apem_cor) LIKE ?",[$newCoordinador]);
-			$correoCor = $datos_coordinador[0]->correo_cor;
-
-			$nomCoordinador = $datos_coordinador[0]->nombre_cor;
-            $apepCoordinador = $datos_coordinador[0]->apep_cor;
-            $apemCoordinador = $datos_coordinador[0]->apem_cor;
-			
-
-			/*DB::table('datos_semestre')
-				->where('cod_carrera',$codCurso)
-				->update(['NOMBRE_CORR' => DB::raw($nomCoordinador) , 'APEP_COR'=> DB::raw($apepCoordinador) , 'APEM_COR'=> DB::raw($apemCoordinador) , 'CORREO_COR'=> DB::raw($correoCor)]);
-			*/
-			//$statement = "UPDATE datos_semestre SET NOMBRE_CORR = '$nomCoordinador' , APEP_CORR = '$apepCoordinador', APEM_COR = '$apemCoordinador' , CORREO_COR = '$correoCor' WHERE COD_CARRERA = '$codCurso'";
-
-			//DB::statement("UPDATE datos_semestre SET NOMBRE_CORR = 'CAMILA' , APEP_CORR = 'GONZALEZ', APEM_COR = 'H' , CORREO_COR = 'cagonzalezh@duoc.cl' WHERE COD_CARRERA = 667215");
-
-			/*DB::table('datos_semestre')
-			->where('cod_carrera',$codCurso)
-			->update(['NOMBRE_CORR' => $nomCoordinador , 'APEP_COR'=> $apepCoordinador , 'APEM_COR'=> $apemCoordinador , 'CORREO_COR'=> $correoCor ]);
-			return response()->json(['message' => 'Data actualizada con exito'],200);
-			*/
-
-	
-
-			echo $codCurso ;
-			echo $newCoordinador;
-			echo $correoCor;
-
+			$data = $request->all();
+			$coordinador = $data['coordinador'];
+			$id_carrera = $data['carrera'];
+			if ($id_carrera == 'null'){
+				echo 'Mal';
+			}else{
+				if ($coordinador == 'null'){
+					echo 'Mal';
+				}else{
+					$id_carrera = filter_var($data['carrera'],FILTER_SANITIZE_NUMBER_INT);
+					$id_carrera = substr($id_carrera,0,-1);
+					$datos_coordinador = DB::select("SELECT nombre_cor,apep_cor,apem_cor,correo_cor from coordinadores WHERE concat_ws(' ',nombre_cor,apep_cor,apem_cor) LIKE (?)",[$coordinador]);
+					$id_carrera_str = "$id_carrera".".0";
+					$nombre_cor = $datos_coordinador[0]->nombre_cor;
+					$apep_cor = $datos_coordinador[0]->apep_cor;
+					$apem_cor = $datos_coordinador[0]->apem_cor;
+					$correo_cor = $datos_coordinador[0]->correo_cor;
+					DB::table('datos_semestre')
+					->where('cod_carrera',$id_carrera_str)
+					->update(array('NOMBRE_COR'=>$nombre_cor,'APEP_COR'=>$apep_cor,'APEM_COR'=>$apem_cor,'CORREO_COR'=>$correo_cor));
+				}
+			}	
 		} else {
 			$cursos = DB::table('datos_semestre')
 				->select('CARRERA','COD_CARRERA','JORNADA')
@@ -275,14 +263,11 @@ class AdministradorController extends Controller
 				->get();
 			$cursos = json_decode(json_encode($cursos), true);
 
-			
-			
-			$resultado = DB::table('datos_semestre')
+			$resultado = DB::table('coordinadores')
 				->select('NOMBRE_COR','APEP_COR','APEM_COR')
 				->distinct()
 				->get();
 			$resultado = json_decode(json_encode($resultado),true);
-
 
 			return view('administrador.asignar-coordinador', [
 				'cursos' => $cursos,
