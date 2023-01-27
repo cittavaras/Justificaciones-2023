@@ -149,50 +149,15 @@ class AdministradorController extends Controller
 
 	public function exportCsv(Request $request)
 	{
-		$fileName = 'tasks.csv';
-		//    $tasks = Task::all();
-		$tasks = DB::table('justifications')->get();
+		    //PDF file is stored under project/public/download/info.pdf
+		exec('python3 /root/Desarrollo/Justificaciones-2023/cargasemestral/convert_excel.py');
+		$file= base_path(). "/archivo-excel.xlsx";
 
-		$headers = array(
-			"Content-type"        => "text/csv",
-			"Content-Disposition" => "attachment; filename=$fileName",
-			"Pragma"              => "no-cache",
-			"Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
-			"Expires"             => "0"
-		);
-
-		$columns = array('ID_DATO', 'NFOLIO', 'TIPO_INASISTENCIA', 'FECHA_SOL', 'FECHA_JUS', 'MOTIVO', 'ESTADO', 'MOTIVO_REC', 'COMENTARIO_REC', 'NOMBRE_ALUM', 'CORREO_ALUM', 'RUT_ALU', 'CORREO_COR', 'CORREO_DOC', 'CELULAR_ALUM', 'UPDATED_AT', 'ASIGNATURA');
-
-		$callback = function () use ($tasks, $columns) {
-			$file = fopen('php://output', 'w');
-			fputcsv($file, $columns);
-
-			foreach ($tasks as $task) {
-				$row[$columns[0]]  = $task->ID_DATO;
-				$row[$columns[1]]  = $task->NFOLIO;
-				$row[$columns[2]]  = $task->TIPO_INASISTENCIA;
-				$row[$columns[3]]  = $task->FEC_SOL;
-				$row[$columns[4]]  = $task->FEC_JUS;
-				$row[$columns[5]]  = $task->MOTIVO;
-				$row[$columns[6]]  = $task->ESTADO;
-				$row[$columns[7]]  = $task->MOTIVO_REC;
-				$row[$columns[8]]  = $task->COMENTARIO_REC;
-				$row[$columns[9]]  = $task->NOMBRE_ALUM;
-				$row[$columns[10]]  = $task->CORREO_ALUM;
-				$row[$columns[11]]  = $task->RUT_ALU;
-				$row[$columns[12]]  = $task->CORREO_COR;
-				$row[$columns[13]]  = $task->CORREO_DOC;
-				$row[$columns[14]]  = $task->CELULAR_ALUM;
-				$row[$columns[15]]  = $task->UPDATED_AT;
-				$row[$columns[16]]  = $task->ASIGNATURA;
-
-				fputcsv($file, array($row[$columns[0]], $row[$columns[1]], $row[$columns[2]], $row[$columns[3]], $row[$columns[4]], $row[$columns[5]], $row[$columns[6]], $row[$columns[7]], $row[$columns[8]], $row[$columns[9]], $row[$columns[10]], $row[$columns[11]], $row[$columns[12]], $row[$columns[13]], $row[$columns[14]], $row[$columns[15]], $row[$columns[16]]));
-			}
-
-			fclose($file);
-		};
-
-		return response()->stream($callback, 200, $headers);
+		$headers = [
+			'Content-Type' => 'application/pdf',
+		];
+  
+  		return response()->download($file, 'archivo-excel.xlsx', $headers);
 	}
 
 	public function addCoordinador(Request $request)
@@ -253,6 +218,7 @@ class AdministradorController extends Controller
 					DB::table('datos_semestre')
 					->where('cod_carrera',$id_carrera_str)
 					->update(array('NOMBRE_COR'=>$nombre_cor,'APEP_COR'=>$apep_cor,'APEM_COR'=>$apem_cor,'CORREO_COR'=>$correo_cor));
+					return response()->json(['type' => 'success', 'message' => 'Se agrego']);
 				}
 			}	
 		} else {

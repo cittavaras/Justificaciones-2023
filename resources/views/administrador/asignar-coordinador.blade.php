@@ -48,7 +48,7 @@
 
 		<input id="but-asignar-coordinador" type="submit" value="Agregar">
 	</form>
-	<div id="respuesta"></div>
+	<div id="respuesta-carga"></div>
 </div>
 
 @endsection
@@ -122,6 +122,37 @@
 					$("#respuesta").css("color", "red");
 					$("#respuesta").html("ERROR: Hubo un error desconocido al agregar coordinador, inténtelo nuevamente");
 				}
+			});
+		});
+	});
+</script>
+<script type="text/javascript">
+	$(function() {
+		$('#asignar-coordinador').submit(function(event) {
+			event.preventDefault();
+			$("#preloader").css("display", "block");
+			$.ajax({
+				url: "{{ route('asignar-coordinador') }}",
+				type: "POST",
+				data: new FormData(this),
+				contentType: false,
+				processData: false,
+				cache: false,
+				success: function(response) {
+					if (response.type == "error") {
+						$("#respuesta-carga").css("color", "red");
+						$("#respuesta-carga").html("ERROR: " + response.message);
+					} else {
+						$("#respuesta-carga").css("color", "green");
+						$("#respuesta-carga").html("Se ha asignado correctamente");
+						$("#carga-form")[0].reset();
+					}
+				},
+				error: function(response) {
+					$("#respuesta-carga").css("color", "red");
+					$("#respuesta-carga").html("Error, por favor revise los datos.");
+				}
+			}).done(function() {
 			});
 		});
 	});

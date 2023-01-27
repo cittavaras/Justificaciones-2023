@@ -12,7 +12,9 @@
         >Exportar</span
       >
     </div>
-
+    <div id="respuesta-carga"></div>
+    <br>
+    <br>
     <h1 class="t-h1">Respaldar & Limpiar<span></span></h1>
     <div class="box1 pa">
       Respaldar y limpiar el registro de justificaciones.
@@ -32,7 +34,6 @@
       <div id="preloader" class="preloader"></div>
     </div>
 
-    <div id="respuesta-carga"></div>
   </div>
 </div>
 
