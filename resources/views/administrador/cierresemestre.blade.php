@@ -45,11 +45,9 @@ function exportTasks(_this) {
   let _url = $(_this).data('href');
   window.location.href = _url;
 }
-
 let confirm = document.getElementById('confirm');
 let btnLimpiar = document.getElementById('limpiar');
 let msg = document.getElementById('respuesta-carga');
-
 confirm.oninput = function () {
   if (confirm.value === 'cerrar semestre') {
     btnLimpiar.removeAttribute('disabled');
@@ -57,20 +55,17 @@ confirm.oninput = function () {
     btnLimpiar.setAttribute('disabled', '');
   }
 };
-
 async function cierre() {
   let res = await fetch('{{ route('sqltomongo') }}');
   let justi = await res.json();
   return justi;
 }
-
 btnLimpiar.onclick = function () {
   cierre()
     .then((res) => {
       if (!res.ok) {
         throw new Error(res.message);
       }
-
       msg.classList.add('successMsg');
       msg.innerHTML = 'Procedimiento compleado exitosamente.';
     })
@@ -79,7 +74,5 @@ btnLimpiar.onclick = function () {
       msg.innerHTML = res;
     });
 };
-
-
 </script>
 @endsection

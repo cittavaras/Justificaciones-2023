@@ -10,3 +10,4 @@ user='root', password='c1tt')
 
 df = pd.read_sql('SELECT * FROM justificaciones.justifications', con=db_connection)
 df.to_excel('archivo-excel.xlsx')
+

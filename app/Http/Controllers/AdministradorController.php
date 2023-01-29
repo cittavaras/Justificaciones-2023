@@ -150,8 +150,8 @@ class AdministradorController extends Controller
 	public function exportCsv(Request $request)
 	{
 		    //PDF file is stored under project/public/download/info.pdf
-		exec('python3 /root/Desarrollo/Justificaciones-2023/cargasemestral/convert_excel.py');
-		$file= base_path(). "/archivo-excel.xlsx";
+		exec('python3.8 /root/Desarrollo/Justificaciones-2023/cargasemestral/convert_excel.py');
+		$file= base_path(). "/public/archivo-excel.xlsx";
 
 		$headers = [
 			'Content-Type' => 'application/pdf',
