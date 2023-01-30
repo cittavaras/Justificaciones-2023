@@ -99,27 +99,10 @@ class AdministradorController extends Controller
 		if ($cant_pendientes > 0) {
 			return response()->json(['message' => 'Hay justificaciones pendientes.']);
 		}
-
-		$result = DB::table($table)->get();
-
-		$result = json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-
-		Storage::disk('public')->put('justis.json', $result);
-
-		exec('cd ' . base_path() . ' ; ' . 'node atlas.js' . ' 2>&1', $out, $err);
-
-		// captura el output enviado por atlas.js
-		$rowsOut = $out[count($out) - 1];
-
-		// verifica que el n de rows de la bd corresponda al n de documents ingresados a mongodb
-		if ($rowsIn == $rowsOut) {
-			// --> ok
-			DB::table($table)->truncate();
-			return response()->json(['ok' => true, 'message' => 'Procedimiento completado exitosamente.']);
-		} else {
-			// -> error
-			return response()->json(['message' => 'Error en el respaldo de la tabla justificaciones.']);
-		}
+		
+		exec('python3.8 '.base_path().'/public/convert_json.py');
+		
+		return response()->json(['ok' => true,'message'=>'Se ha completado la transicion']);
 	}
 
 	public function cargar_datos(Request $request)
@@ -136,8 +119,8 @@ class AdministradorController extends Controller
 				return response()->json(['type' => 'error', 'code' => 'invalid-format', 'message' => 'El formato del archivo es inválido, asegúrese que sea formato XLSX']);
 				}else{
 					$file->move(base_path('cargasemestral/'),'archivo-excel.xlsx');
-					exec('python3.8 /root/Desarrollo/Justificaciones-2023/cargasemestral/carga_datos.py');
-					exec('rm /root/Desarrollo/Justificaciones-2023/cargasemestral/archivo-excel.xlsx');
+					exec('python3.8 '.baste_path().'/cargasemestral/carga_datos.py');
+					exec('rm '.base_path().'/cargasemestral/archivo-excel.xlsx');
 					$users = User::where('activacion','=','2')->get();
 					foreach ($users as $user) {
 						$user->password = Hash::make($user->password);
@@ -150,11 +133,11 @@ class AdministradorController extends Controller
 	public function exportCsv(Request $request)
 	{
 		    //PDF file is stored under project/public/download/info.pdf
-		exec('python3.8 /root/Desarrollo/Justificaciones-2023/cargasemestral/convert_excel.py');
-		$file= base_path(). "/public/archivo-excel.xlsx";
+		exec('python3.8 '.base_path().'/cargasemestral/convert_excel.py');
+		$file= base_path(). "/archivo-excel.xlsx";
 
 		$headers = [
-			'Content-Type' => 'application/pdf',
+			'Content-Type' => 'application/xlsx',
 		];
   
   		return response()->download($file, 'archivo-excel.xlsx', $headers);
