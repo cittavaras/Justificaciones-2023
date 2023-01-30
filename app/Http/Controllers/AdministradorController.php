@@ -101,8 +101,16 @@ class AdministradorController extends Controller
 		}
 		
 		exec('python3.8 '.base_path().'/public/convert_json.py');
-		
-		return response()->json(['ok' => true,'message'=>'Se ha completado la transicion']);
+		exec('cd ' . base_path() . ' ; ' . 'node atlas.js' . ' 2>&1', $out, $err);
+		$rowsOut = $out[count($out) - 1];
+		if ($rowsIn == $rowsOut) {
+			// --> ok
+			DB::table($table)->truncate();
+			return response()->json(['ok' => true, 'message' => 'Procedimiento completado exitosamente.']);
+		} else {
+			// -> error
+			return response()->json(['message' => 'Error en el respaldo de la tabla justificaciones.']);
+		}
 	}
 
 	public function cargar_datos(Request $request)
@@ -133,8 +141,8 @@ class AdministradorController extends Controller
 	public function exportCsv(Request $request)
 	{
 		    //PDF file is stored under project/public/download/info.pdf
-		exec('python3.8 '.base_path().'/cargasemestral/convert_excel.py');
-		$file= base_path(). "/archivo-excel.xlsx";
+		exec('python3 '.base_path().'/cargasemestral/convert_excel.py');
+		$file= base_path(). "/public/archivo-excel.xlsx";
 
 		$headers = [
 			'Content-Type' => 'application/xlsx',

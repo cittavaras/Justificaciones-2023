@@ -4,7 +4,7 @@ const MongoClient = require('mongodb').MongoClient;
 // const uri = "mongodb://admi:unaclavemaslarga123@justificaciones.ivaras.cl/?authSource=admin";
 const uri = "mongodb://admi:unaclavemaslarga123@localhost/?authSource=admin";
 
-let rawdata = fs.readFileSync('public/storage/justis.json');
+let rawdata = fs.readFileSync('public/xx.json');
 let content = JSON.parse(rawdata);
 
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
