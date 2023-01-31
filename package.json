@@ -22,6 +22,6 @@
     "popper.js": "^1.12"
   },
   "dependencies": {
-    "mongodb": "^3.6.2"
+    "mongodb": "^3.7.3"
   }
 }

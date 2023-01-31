@@ -9,8 +9,8 @@ db_connection = sql.connect(host='206.189.212.81',port=3306, database='justifica
 user='root', password='c1tt')
 
 df = pd.read_sql('SELECT * FROM justificaciones.justifications', con=db_connection)
-df.reset_index(level=0, inplace=True)
-
+##df.reset_index(level=0, inplace=True)
+df.to_json()
 xx = df.to_json(orient='records')
 with open('xx.json', 'w') as f:
     f.write(xx)
