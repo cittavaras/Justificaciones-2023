@@ -7,6 +7,7 @@
   {{-- <link href="../vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet"> --}}
   <!-- Dropzone.js -->
   <link href="/vendors/dropzone/dist/min/dropzone.min.css" rel="stylesheet">
+  <link href="/build/css/mi_css.css" rel="stylesheet">
     <style>
       #loader{
         visibility:hidden;
@@ -17,8 +18,25 @@
 @endsection
 
 @section('content')
-
+<div class="row pop-up">
+  <div class="caja small-6 large-centered">
+    <a href="#" class="close-button">&#10006;</a>
+    <br>
+      <h1>Documentación válida</h1>
+      <ol id="lista2">
+    <li>Certificado médico o Licencia Médica</li>
+    <li>Certificado laboral</li>
+    <p>Especifíco</p>
+    <p>* no aplica contrato de trabajo</p>
+    <li>Seleccionados Nacionales(Deportes)</li>
+</ol>
+<h1 class="titulo">Plazo</h1>
+<h1 class="titulo">3 días hábiles</h1>
+<h3 class="subtitulo">desde el reintegro</h3>
+  </div>
+</div>
   <!-- page content -->
+  <div class="blur-in" id="overlay">
   <div class="right_col" role="main">
     <div class="">
       <div class="page-title">
@@ -254,6 +272,7 @@
       </div>
     </div>
   </div>
+  </div>
   <!-- /page content -->
 
 @endsection
@@ -269,7 +288,21 @@
   <!-- bootstrap-datetimepicker -->
   <script src="../vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
   <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+  <script>
+    $(function() {
+  $('.pop-up').hide();
+  $('.pop-up').fadeIn(1000);
+  
+      $('.close-button').click(function (e) { 
 
+      $('.pop-up').fadeOut(700);
+      $('#overlay').removeClass('blur-in');
+      $('#overlay').addClass('blur-out');
+      e.stopPropagation();
+        
+    });
+ });
+ </script>
   <script type="text/javascript">
     function ocultarAlerta() {
         document.getElementById("alertBox").style.opacity=0;
@@ -397,8 +430,8 @@
           ],
           "firstDay": 0
         },
-        "startDate": "01/08/2022",
-        "endDate": "01/08/2022"
+        "startDate": moment(date),
+        "endDate": moment(date)
       });
       Dropzone.autoDiscover = false;
       $("div#my-awesome-dropzone").dropzone({

@@ -14,12 +14,7 @@
 		<p>Ingrese los datos del coordinador que desea crear, una vez presionado el boton "Agregar" espere a la respuesta del 
 			sistema para verificiar la inserción exitosa.
 		</p>
-	</div>
-	<div class="pa">
-		<p>Recuerde que al seleccionar una sección el coordinador creado remplazara al coordinador anterior, pero este ultimo
-			 no sera borrado y quedara en sistema para un posible uso
-		</p>
-	</div>
+</div>
 	<form id="add-coordinador" method="POST">
 		{{ csrf_field() }}
 
@@ -34,20 +29,6 @@
 
 		<label for="correo">Correo: </label>
 		<input type="email" name="correo" id="correo">
-
-		<label for="carrera">Carrera: </label>
-		<select id="carrera-coordinador" name="carrera">
-			<option value="null">Seleccione una carrera</option>
-			@foreach($carreras as $carrera)
-			<option value="{{$carrera['COD_CARRERA']}}">{{$carrera['COD_CARRERA']}} - {{$carrera['NOMBRE_CARRERA']}}</option>
-			@endforeach
-		</select>
-
-		<label for="jornada-coordinador">Jornada:</label>
-		<select id="jornada-coordinador" name="jornada">
-			<option value="DIURNA">DIURNA</option>
-			<option value="VESPERTINA">VESPERTINA</option>
-		</select>
 
 		<input id="but-add-coordinador" type="submit" value="Agregar">
 	</form>

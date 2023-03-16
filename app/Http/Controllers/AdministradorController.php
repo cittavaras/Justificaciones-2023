@@ -101,7 +101,7 @@ class AdministradorController extends Controller
 		}
 		
 		exec('python3.8 '.base_path().'/public/convert_json.py');
-		exec('cd ' . base_path() . ' ;' . 'node atlas.js' ., $out, $err);
+		exec('cd ' . base_path() . ' ; ' . 'node atlas.js' . ' 2>&1', $out, $err);
 		$rowsOut = $out[count($out)];
 		if ($rowsIn == $rowsOut) {
 			// --> ok
@@ -127,7 +127,7 @@ class AdministradorController extends Controller
 				return response()->json(['type' => 'error', 'code' => 'invalid-format', 'message' => 'El formato del archivo es inválido, asegúrese que sea formato XLSX']);
 				}else{
 					$file->move(base_path('cargasemestral/'),'archivo-excel.xlsx');
-					exec('python3.8 '.base_path().'/cargasemestral/carga_datos.py');
+					exec('python3.8 '.baste_path().'/cargasemestral/carga_datos.py');
 					exec('rm '.base_path().'/cargasemestral/archivo-excel.xlsx');
 					$users = User::where('activacion','=','2')->get();
 					foreach ($users as $user) {
@@ -141,14 +141,13 @@ class AdministradorController extends Controller
 	public function exportCsv(Request $request)
 	{
 		    //PDF file is stored under project/public/download/info.pdf
-		exec('python3 '.base_path().'/cargasemestral/convert_excel.py');
+		exec('python3.8 '.base_path().'/cargasemestral/convert_excel.py');
 		$file= base_path(). "/public/archivo-excel.xlsx";
-
 		$headers = [
 			'Content-Type' => 'application/xlsx',
 		];
   
- 		return response()->download($file, 'archivo-excel.xlsx', $headers);
+  		return response()->download($file, 'archivo-excel.xlsx', $headers);
 	}
 
 	public function addCoordinador(Request $request)
@@ -160,10 +159,8 @@ class AdministradorController extends Controller
 			$apaterno = $data['apaterno'];
 			$amaterno = $data['amaterno'];
 			$correo = $data['correo'];
-			$carrera = $data['carrera'];
-			$jornada = $data['jornada'];
 
-			$success = DB::insert('insert into coordinadores (nombre_cor, apep_cor, apem_cor, correo_cor, jornada, cod_carrera) values (?, ?, ?, ?, ?, ?)', [$nombre, $apaterno, $amaterno, $correo, $jornada, $carrera]);
+			$success = DB::insert('insert into coordinadores (nombre_cor, apep_cor, apem_cor, correo_cor) values (?, ?, ?, ?)', [$nombre, $apaterno, $amaterno, $correo]);
 			$user = new User();
 			$user->email = $data['correo'];
 			$user->password = Hash::make(substr($data['correo'], 0, strpos($data['correo'], '@')));
