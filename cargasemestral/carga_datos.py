@@ -13,7 +13,7 @@ conexion=mysql.connector.connect(
 cursor = conexion.cursor()
 i=0
 conexion.commit
-df = pd.read_excel('/root/Desarrollo/Justificaciones-2023/cargasemestral/archivo-excel.xlsx') #Ubicación del archivo excel, lugar por defecto, se debe completar la dirección completa
+df = pd.read_excel('/root/justificacionTAV2023Prod/Justificaciones-2023/cargasemestral/archivo-excel-carga.xlsx') #Ubicación del archivo excel, lugar por defecto, se debe completar la dirección completa
 df.fillna('', inplace=True) #Se revisan los datos nulos
 df=df.drop(columns=['Apellido_Materno_Docente']) #ELiminamos el Apellido_Materno_Docente ya que en la nuestra base de datos no lo incluye
 lista = df.values.tolist() #Se convierte los datos en una lista

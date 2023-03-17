@@ -101,16 +101,16 @@ class AdministradorController extends Controller
 		}
 		
 		exec('python3.8 '.base_path().'/public/convert_json.py');
-		exec('cd ' . base_path() . ' ;' . 'node atlas.js' ., $out, $err);
-		$rowsOut = $out[count($out)];
-		if ($rowsIn == $rowsOut) {
+		//exec('cd ' . base_path() . ' ;' . 'node atlas.js' ., $out, $err);
+		//$rowsOut = $out[count($out)];
+		//if ($rowsIn == $rowsOut) {
 			// --> ok
-			DB::table($table)->truncate();
-			return response()->json(['ok' => true, 'message' => 'Procedimiento completado exitosamente.']);
-		} else {
-			// -> error
-			return response()->json(['message' => 'Error en el respaldo de la tabla justificaciones.']);
-		}
+		//	DB::table($table)->truncate();
+		//	return response()->json(['ok' => true, 'message' => 'Procedimiento completado exitosamente.']);
+		//} else {
+		//	// -> error
+		//	return response()->json(['message' => 'Error en el respaldo de la tabla justificaciones.']);
+		//////}
 	}
 
 	public function cargar_datos(Request $request)
@@ -126,9 +126,9 @@ class AdministradorController extends Controller
 			if (strtolower($file_ext) != 'xlsx') {
 				return response()->json(['type' => 'error', 'code' => 'invalid-format', 'message' => 'El formato del archivo es inválido, asegúrese que sea formato XLSX']);
 				}else{
-					$file->move(base_path('cargasemestral/'),'archivo-excel.xlsx');
+					$file->move(base_path('cargasemestral/'),'archivo-excel-carga.xlsx');
 					exec('python3.8 '.base_path().'/cargasemestral/carga_datos.py');
-					exec('rm '.base_path().'/cargasemestral/archivo-excel.xlsx');
+					exec('rm '.base_path().'/cargasemestral/archivo-excel-carga.xlsx');
 					$users = User::where('activacion','=','2')->get();
 					foreach ($users as $user) {
 						$user->password = Hash::make($user->password);
@@ -141,7 +141,7 @@ class AdministradorController extends Controller
 	public function exportCsv(Request $request)
 	{
 		    //PDF file is stored under project/public/download/info.pdf
-		exec('python3 '.base_path().'/cargasemestral/convert_excel.py');
+		exec('python3.8 '.base_path().'/cargasemestral/convert_excel.py');
 		$file= base_path(). "/public/archivo-excel.xlsx";
 
 		$headers = [
