@@ -203,9 +203,14 @@ class AdministradorController extends Controller
 					$apep_cor = $datos_coordinador[0]->apep_cor;
 					$apem_cor = $datos_coordinador[0]->apem_cor;
 					$correo_cor = $datos_coordinador[0]->correo_cor;
+					//$datos_semestre = DB::select("SELECT NOMBRE_COR,CORREO_COR from datos_semestre WHERE cod_carrera LIKE (?)",[$id_carrera]);
+					//$correo_antiguo = $datos_semestre[0]->correo_cor;
+					//DB::table('justifications')->where(['Estado'=>'PENDIENTE','CORREO_COR'=>$datos_semestre]->update(['CORREO_COR'=>$correo_cor]));
+					//print $datos_semestre;
 					DB::table('datos_semestre')
 					->where('cod_carrera',$id_carrera_str)
 					->update(array('NOMBRE_COR'=>$nombre_cor,'APEP_COR'=>$apep_cor,'APEM_COR'=>$apem_cor,'CORREO_COR'=>$correo_cor));
+					
 					return response()->json(['type' => 'success', 'message' => 'Se agrego']);
 				}
 			}	
