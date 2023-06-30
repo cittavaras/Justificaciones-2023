@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Log;
 
 class ToTeacher extends Mailable
 {
@@ -32,6 +33,7 @@ class ToTeacher extends Mailable
      */
     public function build()
     {
+        Log::debug('Correo enviado del estado rechazado al profesor de la asginatura: ' . $this->justification->ASIGNATURA);
         return $this->subject('Resolución de justificación-RECHAZADA')
             ->markdown('correos.justificaciones.rechazadas.profesor')
             ->with([

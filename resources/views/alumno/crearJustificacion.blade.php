@@ -8,6 +8,7 @@
   <!-- Dropzone.js -->
   <link href="/vendors/dropzone/dist/min/dropzone.min.css" rel="stylesheet">
   <link href="/build/css/mi_css.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/moment/moment.min.js"></script>
     <style>
       #loader{
         visibility:hidden;
@@ -399,9 +400,11 @@
   <script type="text/javascript">
     Dropzone.autoDiscover = false;
     $(document).ready(function () {
+      var today = new Date();
+      var endDate = new Date(today.getTime() + 1 * 24 * 60 * 60 * 1000);
       $('input[name=fechaJustificacion]').daterangepicker({
         "locale": {
-          "format": "MM/DD/YYYY",
+          "format": "DD/MM/YYYY",
           "separator": " - ",
           "applyLabel": "Aplicar",
           "cancelLabel": "Deshacer",
@@ -428,10 +431,11 @@
             "Noviembre",
             "Diciembre"
           ],
-          "firstDay": 0
+          "firstDay": 1
         },
-        "startDate": moment(date),
-        "endDate": moment(date)
+        "startDate": moment(endDate).format('DD/MM/YYYY'),
+        "endDate": moment(endDate).format('DD/MM/YYYY'),
+        "singleDatePicker": false
       });
       Dropzone.autoDiscover = false;
       $("div#my-awesome-dropzone").dropzone({

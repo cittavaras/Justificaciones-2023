@@ -108,6 +108,7 @@
 				url: "{{ route('asignar-coordinador') }}",
 				type: "POST",
 				data: $(this).serialize(),
+				dataType:'json',
 				success: function(response) {
 					if (response.type == "error") {
 						$("#respuesta").css("color", "red");
@@ -138,13 +139,14 @@
 				contentType: false,
 				processData: false,
 				cache: false,
+				dataType:'json',
 				success: function(response) {
 					if (response.type == "error") {
 						$("#respuesta-carga").css("color", "red");
 						$("#respuesta-carga").html("ERROR: " + response.message);
 					} else {
 						$("#respuesta-carga").css("color", "green");
-						$("#respuesta-carga").html("Se ha asignado correctamente");
+						$("#respuesta-carga").html("Listo: "+response.message);
 						$("#carga-form")[0].reset();
 					}
 				},

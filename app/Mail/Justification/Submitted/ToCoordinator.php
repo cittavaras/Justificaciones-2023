@@ -45,7 +45,7 @@ class ToCoordinator extends Mailable
                 'nombreProfes' => $this->teachers,
                 'carreraAlumno' => $this->student[0]->CARRERA,
                 'folio' => $this->justification->NFOLIO,
-                'comentario' => $this->justification->COMENTARIO,
+                'comentario' => $this->justification->comentario,
                 'asignaturas' => $this->subjects,
             ]);
     }

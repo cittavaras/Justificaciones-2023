@@ -46,7 +46,7 @@ class ToStudent extends Mailable
                 'nombreCoordinador' => $this->student[0]->NOMBRE_COR.' '.$this->student[0]->APEP_COR.' '.$this->student[0]->APEM_COR,
                 'carreraAlumno' => $this->student[0]->CARRERA,
                 'folio' => $this->justification->NFOLIO,
-                'comentario' => $this->justification->COMENTARIO,
+                'comentario' => $this->justification->comentario,
                 'asignaturas' => $this->subjects,
             ]);
     }

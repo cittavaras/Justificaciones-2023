@@ -127,7 +127,7 @@ class AdministradorController extends Controller
 				return response()->json(['type' => 'error', 'code' => 'invalid-format', 'message' => 'El formato del archivo es inválido, asegúrese que sea formato XLSX']);
 				}else{
 					$file->move(base_path('cargasemestral/'),'archivo-excel.xlsx');
-					exec('python3.8 '.baste_path().'/cargasemestral/carga_datos.py');
+					exec('python3.8 '.base_path().'/cargasemestral/carga_datos.py');
 					exec('rm '.base_path().'/cargasemestral/archivo-excel.xlsx');
 					$users = User::where('activacion','=','2')->get();
 					foreach ($users as $user) {
@@ -188,30 +188,59 @@ class AdministradorController extends Controller
 		if ($request->isMethod('POST')) {
 			$data = $request->all();
 			$coordinador = $data['coordinador'];
-			$id_carrera = $data['carrera'];
+
+			$id_carrera = $data['carrera']; 
 			if ($id_carrera == 'null'){
 				echo 'Mal';
 			}else{
 				if ($coordinador == 'null'){
 					echo 'Mal';
 				}else{
+					$jorna = $data['carrera'];
+					$jornada_antigua = substr($jorna,-1);
 					$id_carrera = filter_var($data['carrera'],FILTER_SANITIZE_NUMBER_INT);
-					$id_carrera = substr($id_carrera,0,-1);
+					//$id_carrera = substr($id_carrera,0,-1); //Codigo de carrera a cambiar
 					$datos_coordinador = DB::select("SELECT nombre_cor,apep_cor,apem_cor,correo_cor from coordinadores WHERE concat_ws(' ',nombre_cor,apep_cor,apem_cor) LIKE (?)",[$coordinador]);
 					$id_carrera_str = "$id_carrera".".0";
 					$nombre_cor = $datos_coordinador[0]->nombre_cor;
 					$apep_cor = $datos_coordinador[0]->apep_cor;
 					$apem_cor = $datos_coordinador[0]->apem_cor;
-					$correo_cor = $datos_coordinador[0]->correo_cor;
-					//$datos_semestre = DB::select("SELECT NOMBRE_COR,CORREO_COR from datos_semestre WHERE cod_carrera LIKE (?)",[$id_carrera]);
-					//$correo_antiguo = $datos_semestre[0]->correo_cor;
-					//DB::table('justifications')->where(['Estado'=>'PENDIENTE','CORREO_COR'=>$datos_semestre]->update(['CORREO_COR'=>$correo_cor]));
-					//print $datos_semestre;
-					DB::table('datos_semestre')
-					->where('cod_carrera',$id_carrera_str)
-					->update(array('NOMBRE_COR'=>$nombre_cor,'APEP_COR'=>$apep_cor,'APEM_COR'=>$apem_cor,'CORREO_COR'=>$correo_cor));
-					
-					return response()->json(['type' => 'success', 'message' => 'Se agrego']);
+					$correo_cor = $datos_coordinador[0]->correo_cor; //Correo nuevo
+					$resultados = DB::table('datos_semestre')
+					->select('cod_carrera', 'JORNADA', 'CORREO_COR')
+					->where('cod_carrera', '=', $id_carrera)
+					->where('JORNADA','=',$jornada_antigua)
+					->first(); //Correo antiguo
+					if ($resultados === null) {
+						return response()->json(['type' => 'error', 'message' => 'Error al momento de seleccionar el coordinador']);
+					} else {
+						$cod_carrera_antiguo = $resultados->cod_carrera;
+						$jornada_antigua = $resultados->JORNADA;
+						$correo_antiguo = $resultados->CORREO_COR;
+						$correo_nuevo = $correo_cor;
+						$filas_actualizadas_datos = DB::table('datos_semestre')
+							->where('cod_carrera',$cod_carrera_antiguo)
+							->where('JORNADA',$jornada_antigua)
+							->where('CORREO_COR',$correo_antiguo)
+							->update(['CORREO_COR'=>$correo_nuevo]);
+						if ($filas_actualizadas_datos > 0){
+								$filas_actualizadas = DB::table('justifications')
+								->where('CORREO_COR', $correo_antiguo)
+								->update(['CORREO_COR' => $correo_nuevo]);
+								DB::table('datos_semestre')
+								->where('cod_carrera',$cod_carrera_antiguo)
+								->where('JORNADA',$jornada_antigua)
+								->where('CORREO_COR',$correo_antiguo)
+								->update(['CORREO_COR'=>$correo_nuevo]);
+								if ($filas_actualizadas > 0){
+									return response()->json(['type' => 'success', 'message' => 'Se ha realizado los cambios con exito']);
+								}else{
+									return response()->json(['type' => 'error', 'message' => 'Verifique que el coordinador haya tenido justificaciones pendientes']);
+								}
+						}else{
+							return response()->json(['type' => 'error', 'message' => 'Se ha producido un error']);
+						}
+					}
 				}
 			}	
 		} else {

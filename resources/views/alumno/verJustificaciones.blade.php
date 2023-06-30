@@ -114,7 +114,7 @@
 
                       <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
                         <label for="nombreDocente" class="control-label">Comentarios Solicitud:</label>
-                        <textarea cols="40" rows="5" id="message" required="required" class="form-control" readonly="readonly" placeholder="{{ $justifications->COMENTARIO }}" name="{{ $justifications->COMENTARIO }}"></textarea>
+                        <textarea cols="40" rows="5" id="message" required="required" class="form-control" readonly="readonly" placeholder="{{ $justifications->comentario }}" name="{{ $justifications->comentario }}"></textarea>
                       </div>
 
                       <h2 class="StepTitle">Certificado Alumno (Click para ver)</h2>
@@ -142,7 +142,7 @@
                       <br>
                     <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
                         <label for="nombreDocente" class="control-label">Respuesta Solicitud:</label>
-                        <textarea cols="40" rows="5" id="message" class="form-control" readonly="readonly" placeholder="{{ $justifications->COMENTARIO_REC }}" name="{{ $justifications->COMENTARIO_REC }}"></textarea>
+                        <textarea cols="40" rows="5" id="message" class="form-control" readonly="readonly" placeholder="{{ $justifications->comentario_rec }}" name="{{ $justifications->comentario_rec }}"></textarea>
                    </div>
                 </div>
               <!-- End SmartWizard Content -->

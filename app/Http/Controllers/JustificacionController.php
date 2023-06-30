@@ -191,7 +191,7 @@ class JustificacionController extends Controller
     {
         Justification::whereFolio($request->folio)->update([
             'estado' => $request->estado,
-            'COMENTARIO_REC' => $request->comentarioRechazo
+            'comentario_rec' => $request->comentarioRechazo
         ]);
         $justificacion = Justification::whereFolio($request->folio)->first();
         if ($request->estado == 'Aprobado') {

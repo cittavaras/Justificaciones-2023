@@ -130,7 +130,7 @@
 
                       <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
                         <label for="nombreDocente" class="control-label">Comentarios Solicitud:</label>
-                        <textarea cols="40" rows="5" id="message" required="required" class="form-control" readonly="readonly" placeholder="{{ $justifications->COMENTARIO }}" name="{{ $justifications->COMENTARIO }}"></textarea>
+                        <textarea cols="40" rows="5" id="message" required="required" class="form-control" readonly="readonly" placeholder="{{ $justifications->comentario }}" name="{{ $justifications->comentario }}"></textarea>
                       </div>
 
                       <h2 class="StepTitle">Certificado Alumno (Click para ver)</h2>
@@ -159,7 +159,7 @@
 
                       <br>
                       <label for="message">Ingrese máximo 1000 caracteres:</label>
-                      <textarea cols="40" rows="5" id="message" required="required" class="form-control" name="comentarioRechazo" >{{ $justifications->COMENTARIO_REC }}</textarea>
+                      <textarea cols="40" rows="5" id="message" required="required" class="form-control" name="comentarioRechazo" >{{ $justifications->comentario_rec }}</textarea>
                     <br>
                  <button  type="submit" id="submit" class="buttonFinish btn btn-default" style="display: inline;">Finalizar</button>
                 </div>

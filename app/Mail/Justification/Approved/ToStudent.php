@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Log;
 
 class ToStudent extends Mailable
 {
@@ -36,6 +37,7 @@ class ToStudent extends Mailable
      */
     public function build()
     {
+        Log::debug('Correo enviado del estado aprobado al alumno: ' . $this->justification->NOMBRE_ALUM);
         return $this->subject('Resolución de justificación')
             ->markdown('correos.justificaciones.aprobadas.alumno')
             ->with([
@@ -43,7 +45,7 @@ class ToStudent extends Mailable
                 'folio' => $this->justification->nfolio,
                 'nombreAlumno' => $this->justification->NOMBRE_ALUM.' '.$this->justification->APEP_ALUM,
                 'fechaJustificacion' => $this->justification->FEC_JUS,
-                'resolucion' => $this->justification->COMENTARIO_REC,
+                'resolucion' => $this->justification->comentario_rec,
                 'fechaSolicitud' => $this->justification->FEC_SOL,
 
                 // extra data
@@ -53,4 +55,5 @@ class ToStudent extends Mailable
                 'asignaturas' => $this->subjects,
             ]);
     }
+    
 }
